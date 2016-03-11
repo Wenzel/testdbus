@@ -13,10 +13,13 @@ int main(int argc, char* argv[])
     Service* serv = new Service(&app);
     ServiceAdapter* adapter = new ServiceAdapter(serv);
 
-    connection.registerService("org.testdbus.service");
-    connection.registerObject("/", adapter);
+    if (!connection.registerService("org.testdbus.service"))
+        qFatal("Unable to register");
 
-    org::testdbus::service* iface = new org::testdbus::service("org.testdbus.service", "/", connection, &app);
+    if (!connection.registerObject("/", adapter))
+        qFatal("unable to object");
+
+    // org::testdbus::service* iface = new org::testdbus::service("org.testdbus.service", "/", connection, &app);
 
     app.exec();
 
